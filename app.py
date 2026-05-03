@@ -7,32 +7,39 @@ df = df.sort_values("date")
 
 PRICE_INCREASE_DATE = pd.Timestamp("2021-01-15")
 
-regions = ["north", "south", "east", "west", "all"]
+REGIONS = ["north", "south", "east", "west", "all"]
 
 app = Dash(__name__)
 
 app.layout = html.Div(
-    style={"fontFamily": "Arial, sans-serif", "maxWidth": "1100px", "margin": "0 auto", "padding": "24px"},
+    id="page-wrapper",
     children=[
-        html.H1(
-            "Soul Foods – Pink Morsel Sales Visualiser",
-            style={"textAlign": "center", "color": "#2c3e50"},
+        html.Div(
+            id="app-header",
+            children=[
+                html.H1("Soul Foods – Pink Morsel Sales Visualiser"),
+                html.P("Daily sales revenue, split by the 15 Jan 2021 price increase"),
+            ],
         ),
         html.Div(
-            [
-                html.Label("Filter by Region:", style={"fontWeight": "bold", "marginRight": "8px"}),
+            className="card",
+            id="filter-card",
+            children=[
+                html.Span("Filter by region", id="filter-label"),
                 dcc.RadioItems(
                     id="region-filter",
-                    options=[{"label": r.capitalize(), "value": r} for r in regions],
+                    options=[{"label": r.capitalize(), "value": r} for r in REGIONS],
                     value="all",
                     inline=True,
-                    inputStyle={"marginRight": "4px"},
-                    labelStyle={"marginRight": "16px"},
+                    inputStyle={"display": "none"},
                 ),
             ],
-            style={"margin": "16px 0"},
         ),
-        dcc.Graph(id="sales-chart"),
+        html.Div(
+            className="card",
+            id="chart-card",
+            children=[dcc.Graph(id="sales-chart", config={"displayModeBar": False})],
+        ),
     ],
 )
 
@@ -50,29 +57,41 @@ def update_chart(region):
     fig.add_trace(go.Scatter(
         x=before["date"], y=before["sales"],
         mode="lines", name="Before price increase",
-        line=dict(color="#2980b9", width=2),
+        line=dict(color="#ad1457", width=2.5),
+        fill="tozeroy", fillcolor="rgba(173,20,87,0.07)",
     ))
     fig.add_trace(go.Scatter(
         x=after["date"], y=after["sales"],
         mode="lines", name="After price increase",
-        line=dict(color="#e74c3c", width=2),
+        line=dict(color="#6a1b9a", width=2.5),
+        fill="tozeroy", fillcolor="rgba(106,27,154,0.07)",
     ))
 
     fig.add_vline(
         x=PRICE_INCREASE_DATE.timestamp() * 1000,
-        line_dash="dash", line_color="#7f8c8d",
-        annotation_text="Price increase (15 Jan 2021)",
+        line_dash="dot",
+        line_color="#78586f",
+        line_width=1.5,
+        annotation_text="Price increase – 15 Jan 2021",
         annotation_position="top right",
+        annotation_font=dict(color="#6a1b9a", size=12),
     )
 
+    region_label = "All Regions" if region == "all" else region.capitalize() + " Region"
     fig.update_layout(
-        title="Daily Pink Morsel Sales" + ("" if region == "all" else f" – {region.capitalize()} Region"),
-        xaxis_title="Date",
-        yaxis_title="Total Sales ($)",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        plot_bgcolor="#f9f9f9",
-        paper_bgcolor="white",
+        title=dict(
+            text=f"Daily Pink Morsel Sales – {region_label}",
+            font=dict(size=17, color="#37003c", family="Segoe UI, Arial, sans-serif"),
+            x=0.01,
+        ),
+        xaxis=dict(title="Date", showgrid=True, gridcolor="#f3e5f5", tickfont=dict(size=11)),
+        yaxis=dict(title="Total Sales ($)", showgrid=True, gridcolor="#f3e5f5", tickfont=dict(size=11)),
+        legend=dict(orientation="h", yanchor="bottom", y=1.04, xanchor="right", x=1,
+                    font=dict(size=12)),
+        plot_bgcolor="#fff",
+        paper_bgcolor="#fff",
         hovermode="x unified",
+        margin=dict(l=60, r=20, t=60, b=50),
     )
     return fig
 

@@ -1,0 +1,105 @@
+/* ── Global ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e8eaf6 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #37003c;
+}
+
+/* ── Page wrapper ── */
+#page-wrapper {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 36px 24px 48px;
+}
+
+/* ── Header ── */
+#app-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+#app-header h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin: 0 0 6px;
+    background: linear-gradient(90deg, #ad1457, #6a1b9a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+#app-header p {
+    margin: 0;
+    font-size: 1rem;
+    color: #78586f;
+}
+
+/* ── Card ── */
+.card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(100, 30, 100, 0.10);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+}
+
+/* ── Region filter ── */
+#filter-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+#filter-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6a1b9a;
+    white-space: nowrap;
+}
+
+/* Radio items rendered by Dash — target the wrapper divs */
+#region-filter {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#region-filter label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    border: 2px solid #ce93d8;
+    background: #fce4ec;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #6a1b9a;
+    cursor: pointer;
+    transition: background 0.18s, border-color 0.18s, color 0.18s;
+    user-select: none;
+}
+
+#region-filter label:hover {
+    background: #f48fb1;
+    border-color: #ad1457;
+    color: #fff;
+}
+
+/* Hide the default radio circle */
+#region-filter input[type="radio"] {
+    display: none;
+}
+
+/* ── Chart card ── */
+#chart-card {
+    padding: 20px 12px 8px;
+}
