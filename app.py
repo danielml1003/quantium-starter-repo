@@ -1,11 +1,11 @@
 import pandas as pd
 import plotly.graph_objects as go
-from dash import Dash, dcc, html
+from dash import Dash, Input, Output, dcc, html
 
 df = pd.read_csv("formatted_data.csv", parse_dates=["date"])
 df = df.sort_values("date")
 
-PRICE_INCREASE_DATE = "2021-01-15"
+PRICE_INCREASE_DATE = pd.Timestamp("2021-01-15")
 
 regions = ["north", "south", "east", "west", "all"]
 
@@ -37,8 +37,6 @@ app.layout = html.Div(
 )
 
 
-from dash import Input, Output
-
 @app.callback(Output("sales-chart", "figure"), Input("region-filter", "value"))
 def update_chart(region):
     filtered = df if region == "all" else df[df["region"] == region]
@@ -61,7 +59,7 @@ def update_chart(region):
     ))
 
     fig.add_vline(
-        x=PRICE_INCREASE_DATE,
+        x=PRICE_INCREASE_DATE.timestamp() * 1000,
         line_dash="dash", line_color="#7f8c8d",
         annotation_text="Price increase (15 Jan 2021)",
         annotation_position="top right",
